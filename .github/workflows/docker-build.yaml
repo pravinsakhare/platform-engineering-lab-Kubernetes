@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -29,7 +31,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/node-app:${{ github.sha }}
       - name: Update Kubernetes manifest with new image
         run: |
-          sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME}} }/node-app:${{ github.sha }}|" k8s/node-app/deployment.yaml
+          sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/node-app:${{ github.sha }}|" k8s/node-app/deployment.yaml
       - name: Commit updated manifest
         run: |
           git config user.name "github-actions"
